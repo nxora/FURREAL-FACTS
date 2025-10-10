@@ -76,6 +76,8 @@ npm start
 Now visit 👉 http://localhost:3000
  in your browser.
 
+Tribute
+Wealthometer (💁‍♂️)
  🏆 Achievements
 
 ✅ Unified cats & dogs under one seamless UI
