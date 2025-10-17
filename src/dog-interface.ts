@@ -9,10 +9,11 @@ export interface DogBreed {
   temperament: string;
   wikipedia_url: string;
   weight: { imperial: string; metric: string };
-  cat_friendly: number; // ⚠️ dogs have cat_friendly, NOT dog_friendly
+  cat_friendly: number;
   stranger_friendly: number;
   social_needs: number;
   intelligence: number;
   alt_names?: string;
-  image: { url: string };
+  image?: { url: string }; // optional
+  reference_image_id?: string; 
 }

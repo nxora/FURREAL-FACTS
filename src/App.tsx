@@ -25,29 +25,33 @@ function App() {
   });
 
   // Normalize dog data
-  const normalizeDog = (dog: DogBreed): PetBreed => ({
-    id: dog.id.toString(),
-    name: dog.name,
-    description: dog.description || 'No description available.',
-    origin: dog.origin,
-    country_code: dog.country_code,
-    life_span: dog.life_span,
-    temperament: dog.temperament,
-    wikipedia_url: dog.wikipedia_url || '',
-    weight: dog.weight,
-    image_url: dog.image?.url || '',
-    cat_friendly: dog.cat_friendly,
-    stranger_friendly: dog.stranger_friendly,
-    social_needs: dog.social_needs,
-    intelligence: dog.intelligence,
-    alt_names: dog.alt_names,
-    type: 'dog',
-  });
+const normalizeDog = (dog: DogBreed): PetBreed => ({
+  id: dog.id.toString(),
+  name: dog.name,
+  description: dog.description || 'No description available.',
+  origin: dog.origin,
+  country_code: dog.country_code,
+  life_span: dog.life_span,
+  temperament: dog.temperament,
+  wikipedia_url: dog.wikipedia_url || '',
+  weight: dog.weight,
+  // 👇 Prioritize reference_image_id over image.url for reliability
+  image_url: dog.reference_image_id
+    ? `https://cdn2.thedogapi.com/images/${dog.reference_image_id}.jpg`
+    : dog.image?.url || '',
+  cat_friendly: dog.cat_friendly,
+  stranger_friendly: dog.stranger_friendly,
+  social_needs: dog.social_needs,
+  intelligence: dog.intelligence,
+  alt_names: dog.alt_names,
+  type: 'dog',
+});
 
   useEffect(() => {
     const fetchCats = async () => {
       try {
-        const CAT_API_KEY = 'YOUR-CAT-API-KEY';
+        const CAT_API_KEY = process.env.REACT_APP_CAT_API_KEY;
+              if (!CAT_API_KEY) throw new Error('Cat API key missing');
         const res = await fetch('https://api.thecatapi.com/v1/breeds', {
           headers: { 'x-api-key': CAT_API_KEY }
         });
@@ -62,12 +66,14 @@ function App() {
 
     const fetchDogs = async () => {
       try {
-        const DOG_API_KEY = 'YOUR-DOG-API-KEY';
+        const DOG_API_KEY = process.env.REACT_APP_DOG_API_KEY;
+              if (!DOG_API_KEY) throw new Error('Dog API key missing');
         const res = await fetch('https://api.thedogapi.com/v1/breeds', {
           headers: { 'x-api-key': DOG_API_KEY }
         });
         if (!res.ok) throw new Error(`Dog API: ${res.status}`);
         const data: DogBreed[] = await res.json();
+        console.log('First dog:', data[0]);
         setDogBreeds(data.map(normalizeDog));
       } catch (err) {
         console.error('Dog fetch error:', err);
@@ -96,8 +102,8 @@ function App() {
     setSearchTerm('');
   };
 
-  if (loading) return <div className="text-white text-center p-8">Loading...</div>;
-  if (error) return <div className="text-red-400 text-center p-8">{error}</div>;
+  if (loading) return <div className="text-blue-400 font-bold text-center p-8">Loading...</div>;
+  if (error) return <div className="text-red-400 text-center font-bold p-8">{error}</div>;
 
   return (
     <div className="p-8 font-sans bg-gradient-to-bl from-gray-800 min-h-screen">
