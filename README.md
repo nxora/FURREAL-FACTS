@@ -1,6 +1,5 @@
-<p align="center">
-  <img src="./banner.png" alt="Furreal Facts Banner" width="100%" />
-</p>
+**![Furreal Facts Banner](./public/furreal.png?raw=true)**
+
 
 # 🐾 Furreal Facts — Discover the World of Cats 🐱 & Dogs 🐶
 
